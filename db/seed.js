@@ -1,6 +1,44 @@
 // db/seed.js
 
-const { client, getAllUsers } = require("./index");
+const { client, getAllUsers, createUser } = require("./index");
+
+async function createInitialUsers() {
+  try {
+    console.log("Starting to create users...");
+
+    const albert = await createUser({
+      username: "albert",
+      password: "bertie99",
+    });
+    const sandra = await createUser({
+      username: "sandra",
+      password: "2sandy4me",
+    });
+    const glamgal = await createUser({
+      username: "glamgal",
+      password: "soglam",
+    });
+
+    console.log(albert);
+
+    console.log("Finished creating users!");
+  } catch (error) {
+    console.error("Error creating users!");
+    throw error;
+  }
+}
+
+async function rebuildDB() {
+  try {
+    client.connect();
+
+    await dropTables();
+    await createTables();
+    await createInitialUsers();
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function dropTables() {
   try {
@@ -32,17 +70,6 @@ async function createTables() {
     console.log("Finished building tables!");
   } catch (error) {
     console.error("Error building tables!");
-    throw error;
-  }
-}
-
-async function rebuildDB() {
-  try {
-    client.connect();
-
-    await dropTables();
-    await createTables();
-  } catch (error) {
     throw error;
   }
 }
