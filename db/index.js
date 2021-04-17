@@ -94,12 +94,7 @@ async function getUserById(userId) {
  * POST Methods
  */
 
-async function createPost({
-  authorId,
-  title,
-  content,
-  tags = [], // this is new
-}) {
+async function createPost({ authorId, title, content, tags = [] }) {
   try {
     const {
       rows: [post],
@@ -122,7 +117,7 @@ async function createPost({
 
 async function updatePost(postId, fields = {}) {
   // read off the tags & remove that field
-  const { tags } = fields; // might be undefined
+  const { tags } = fields;
   delete fields.tags;
 
   // build the set string
@@ -214,7 +209,6 @@ async function createTags(tagList) {
   }
 
   const insertValues = tagList.map((_, index) => `$${index + 1}`).join("), (");
-
   const selectValues = tagList.map((_, index) => `$${index + 1}`).join(", ");
 
   try {
