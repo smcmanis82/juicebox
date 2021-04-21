@@ -1,4 +1,7 @@
 // inside index.js
+require("dotenv").config();
+
+// EVERYTHING ELSE
 const PORT = 3000;
 const express = require("express");
 const server = express();
