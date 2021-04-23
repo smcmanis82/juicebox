@@ -1,16 +1,15 @@
 const express = require("express");
-
 const apiRouter = express.Router();
-const usersRouter = require("./users");
-const postsRouter = require("./posts");
-const tagsRouter = require("./tags");
+
 const jwt = require("jsonwebtoken");
 const { getUserById } = require("../db");
 const { JWT_SECRET } = process.env;
 
-// set `req.user` if possible
-//authorization middleware
+const usersRouter = require("./users");
+const postsRouter = require("./posts");
+const tagsRouter = require("./tags");
 
+//authorization middleware
 apiRouter.use(async (req, res, next) => {
   const prefix = "Bearer ";
   const auth = req.header("Authorization");
@@ -36,7 +35,7 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
-// making sure everything correct
+// making sure everything is correct
 apiRouter.use((req, res, next) => {
   if (req.user) {
     console.log("User is set:", req.user);
