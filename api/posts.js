@@ -92,18 +92,39 @@ postsRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 
+postsRouter.get("/", async (req, res) => {
+  let posts;
+  try {
+    const allPosts = await getAllPosts();
+    if (req.user) {
+      posts = allPosts.filter((post) => {
+        return req.user && post.author.id === req.user.id;
+      });
+    } else {
+      posts = allPosts.filter((post) => {
+        return post.active;
+      });
+    }
+    res.send({
+      posts: posts,
+    });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
 postsRouter.use((req, res, next) => {
   console.log("A request is being made to /posts");
 
   next(); // THIS IS DIFFERENT
 });
 
-postsRouter.get("/", async (req, res) => {
-  const posts = await getAllPosts();
+// postsRouter.get("/", async (req, res) => {
+//   const posts = await getAllPosts();
 
-  res.send({
-    posts,
-  });
-});
+//   res.send({
+//     posts,
+//   });
+// });
 
 module.exports = postsRouter;
